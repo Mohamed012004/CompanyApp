@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Company.Route.DAL.Data.Contexts
 {
-    internal class CompanyDbContext : DbContext
+    public class CompanyDbContext : DbContext
     {
         public CompanyDbContext() : base()
         {
