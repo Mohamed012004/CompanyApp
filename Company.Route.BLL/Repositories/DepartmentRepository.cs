@@ -6,7 +6,7 @@ namespace Company.Route.BLL.Repositories
 {
     internal class DepartmentRepository : IDepartmentRepository
     {
-        public CompanyDbContext _context;
+        public readonly CompanyDbContext _context;
         public DepartmentRepository()
         {
             _context = new CompanyDbContext();
