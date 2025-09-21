@@ -4,12 +4,14 @@ using Company.Route.DAL.Models;
 
 namespace Company.Route.BLL.Repositories
 {
-    internal class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : IDepartmentRepository
     {
         public readonly CompanyDbContext _context;
-        public DepartmentRepository()
+
+        // ASK From CLR To Create Object From CompanyDbContext
+        public DepartmentRepository(CompanyDbContext context)
         {
-            _context = new CompanyDbContext();
+            _context = context;
         }
 
         public IEnumerable<Department> GetAll()

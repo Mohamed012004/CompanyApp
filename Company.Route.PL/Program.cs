@@ -1,3 +1,8 @@
+using Company.Route.BLL.Interfaces;
+using Company.Route.BLL.Repositories;
+using Company.Route.DAL.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
+
 namespace Company.Route.PL
 {
     public class Program
@@ -8,7 +13,13 @@ namespace Company.Route.PL
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews();  // Register Build-in MVC Services
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();  // Allow DI For DepartmentRepository
+            builder.Services.AddDbContext<CompanyDbContext>(options =>
+            {
+                //options.UseSqlServer(builder.Configuration["DefaultConnection"]); // Pass Key ==> return Value
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });  // Allow DI For CompanyDbContext
 
             var app = builder.Build();
 
