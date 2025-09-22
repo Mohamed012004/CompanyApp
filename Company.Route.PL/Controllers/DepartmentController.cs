@@ -54,11 +54,8 @@ namespace Company.Route.PL.Controllers
         public IActionResult Details(int id)
         {
             var department = _departmentRepository.GetId(id);
-            if (department == null)
-            {
 
-            }
-            return View();
+            return View(department);
         }
 
 
