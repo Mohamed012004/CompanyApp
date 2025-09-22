@@ -1,4 +1,6 @@
 ﻿using Company.Route.BLL.Interfaces;
+using Company.Route.DAL.Models;
+using Company.Route.PL.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Company.Route.PL.Controllers
@@ -19,6 +21,46 @@ namespace Company.Route.PL.Controllers
             var departments = _departmentRepository.GetAll();
             return View(departments);
         }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(CreateDepartmentDto model) // Form
+        {
+            if (ModelState.IsValid)
+            {
+                var department = new Department()
+                {
+                    Code = model.Code,
+                    Name = model.Name,
+                    CreateAt = model.CreateAt
+                };
+
+                var count = _departmentRepository.ADD(department);
+
+                if (count > 0)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
+            return View(model);
+        }
+
+
+        public IActionResult Details(int id)
+        {
+            var department = _departmentRepository.GetId(id);
+            if (department == null)
+            {
+
+            }
+            return View();
+        }
+
 
     }
 }
