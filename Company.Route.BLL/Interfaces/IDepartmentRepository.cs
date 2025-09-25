@@ -6,7 +6,7 @@ namespace Company.Route.BLL.Interfaces
     {
 
         IEnumerable<Department> GetAll();
-        Department? GetId(int id);
+        Department? Get(int id);
 
         int ADD(Department model);
         int Update(Department model);
