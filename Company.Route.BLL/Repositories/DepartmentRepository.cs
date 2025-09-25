@@ -19,7 +19,7 @@ namespace Company.Route.BLL.Repositories
             return _context.Departments.ToList();
         }
 
-        public Department? GetId(int id)
+        public Department? Get(int id)
         {
             return _context.Departments.Find(id);
         }

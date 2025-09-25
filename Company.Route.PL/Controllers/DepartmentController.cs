@@ -53,7 +53,16 @@ namespace Company.Route.PL.Controllers
 
         public IActionResult Details(int id)
         {
-            var department = _departmentRepository.GetId(id);
+            if (id == null) return BadRequest("InValid Id");
+            var department = _departmentRepository.Get(id);
+            if (department is null)
+            {
+                return NotFound(new
+                {
+                    StatusCode = 404,
+                    Message = $"Department With {id}, Not Found"
+                });
+            }
 
             return View(department);
         }
