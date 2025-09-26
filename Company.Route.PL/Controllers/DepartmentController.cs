@@ -67,6 +67,72 @@ namespace Company.Route.PL.Controllers
             return View(department);
         }
 
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            if (id == null) return BadRequest("Invalid Id");
+            var department = _departmentRepository.Get(id);
+            if (department is null) return NotFound(new
+            {
+                StatusCode = 404,
+                Message = $"The Department With {id}, Not Found"
+            });
+            return View(department);
+        }
+
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([FromRoute] int id, Department department)  // Route => Segment
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (id != department.Id) return BadRequest(); // 400
+
+        //        var count = _departmentRepository.Update(department);
+        //        if (count > 0)
+        //        {
+        //            return RedirectToAction("Index");
+        //        }
+
+        //    }
+        //    return View(department);
+        //}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([FromRoute] int id, UpdateDepartmentDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var department = new Department
+                {
+                    Code = model.Code,
+                    Name = model.Name,
+                    CreateAt = model.CreateAt,
+                };
+                var count = _departmentRepository.Update(department);
+                if (count > 0)
+                {
+                    return RedirectToAction("Index");
+                }
+
+            }
+            return View(model);
+        }
+
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
