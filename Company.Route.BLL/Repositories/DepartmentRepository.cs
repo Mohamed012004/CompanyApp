@@ -4,44 +4,59 @@ using Company.Route.DAL.Models;
 
 namespace Company.Route.BLL.Repositories
 {
-    public class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : GenericRepository<Department>, IDepartmentRepository
     {
-        public readonly CompanyDbContext _context;
+        // ASK From CLR To Create Or Injuct Object From CompanyDbContext
 
-        // ASK From CLR To Create Object From CompanyDbContext
-        public DepartmentRepository(CompanyDbContext context)
+        public DepartmentRepository(CompanyDbContext context) : base(context)
         {
-            _context = context;
+
         }
 
-        public IEnumerable<Department> GetAll()
-        {
-            return _context.Departments.ToList();
-        }
+        #region Implemented By Class GenericRepository
 
-        public Department? Get(int id)
-        {
-            return _context.Departments.Find(id);
-        }
-        public int ADD(Department model)
-        {
-            _context.Add(model);
-            return _context.SaveChanges();
-        }
+        //public readonly CompanyDbContext _context;
 
-        public int Update(Department model)
+        //ASK From CLR To Create Object From CompanyDbContext
+        //public DepartmentRepository(CompanyDbContext context)
+        //{
+        //    _context = context;
+        //}
+
+        //public IEnumerable<Department> GetAll()
+        //{
+        //    return _context.Departments.ToList();
+        //}
+
+        //public Department? Get(int id)
+        //{
+        //    return _context.Departments.Find(id);
+        //}
+        //public int ADD(Department model)
+        //{
+        //    _context.Add(model);
+        //    return _context.SaveChanges();
+        //}
+
+        //public int Update(Department model)
+        //{
+        //    _context.Update(model);
+        //    return _context.SaveChanges();
+        //}
+
+        //public int Delete(Department model)
+        //{
+        //    _context.Remove(model);
+        //    return _context.SaveChanges();
+        //}
+
+        #endregion
+
+
+        public Department? GetByName(string Name)
         {
-            _context.Update(model);
-            return _context.SaveChanges();
+            throw new NotImplementedException();
         }
-
-        public int Delete(Department model)
-        {
-            _context.Remove(model);
-            return _context.SaveChanges();
-        }
-
-
 
     }
 }

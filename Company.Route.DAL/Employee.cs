@@ -1,8 +1,9 @@
-﻿namespace Company.Route.DAL
+﻿using Company.Route.DAL.Models;
+
+namespace Company.Route.DAL
 {
-    public class Employee
+    public class Employee : BaseEntity
     {
-        public int Id { get; set; }
         public double Age { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
