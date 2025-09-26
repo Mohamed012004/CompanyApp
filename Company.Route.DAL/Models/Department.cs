@@ -1,4 +1,5 @@
-﻿namespace Company.Route.DAL.Models
+﻿
+namespace Company.Route.DAL.Models
 {
     public class Department
     {
