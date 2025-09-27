@@ -15,6 +15,7 @@ namespace Company.Route.PL
             // Add services to the container.
             builder.Services.AddControllersWithViews();  // Register Build-in MVC Services
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();  // Allow DI For DepartmentRepository
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();  // Allow DI For DepartmentRepository
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
                 //options.UseSqlServer(builder.Configuration["DefaultConnection"]); // Pass Key ==> return Value
