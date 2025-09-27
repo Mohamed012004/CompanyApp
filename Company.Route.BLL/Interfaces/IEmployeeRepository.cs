@@ -2,7 +2,7 @@
 
 namespace Company.Route.BLL.Interfaces
 {
-    internal interface IEmployeeRepository : IGenericRepository<Employee>
+    public interface IEmployeeRepository : IGenericRepository<Employee>
     {
 
         //public Employee? GetByName(string Name);
