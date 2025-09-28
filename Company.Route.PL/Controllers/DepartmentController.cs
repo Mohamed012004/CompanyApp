@@ -72,53 +72,35 @@ namespace Company.Route.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            //if (id == null) return BadRequest("Invalid Id");
-            //var department = _departmentRepository.Get(id);
-            //if (department is null) return NotFound(new
-            //{
-            //    StatusCode = 404,
-            //    Message = $"The Department With {id}, Not Found"
-            //});
-            //return View(department);
+            if (id == null) return BadRequest("Invalid Id");
+            var department = _departmentRepository.Get(id);
+            if (department is null) return NotFound(new
+            {
+                StatusCode = 404,
+                Message = $"The Department With {id}, Not Found"
+            });
+
+            var departmentDto = new CreateDepartmentDto()
+            {
+                Code = department.Code,
+                Name = department.Name,
+                CreateAt = department.CreateAt
+            };
+            return View(departmentDto);
 
             //Refactoring
-            return Details(id, viewName: "Edit");
-
-
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([FromRoute] int id, Department department)  // Route => Segment
-        {
-            if (ModelState.IsValid)
-            {
-                if (id != department.Id) return BadRequest(); // 400
-
-                var count = _departmentRepository.Update(department);
-                if (count > 0)
-                {
-                    return RedirectToAction("Index");
-                }
-
-            }
-            return View(department);
+            //return Details(id, viewName: "Edit");
         }
 
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //public IActionResult Edit([FromRoute] int id, UpdateDepartmentDto model)
+        //public ActionResult Edit([FromRoute] int id, Department department)  // Route => Segment
         //{
         //    if (ModelState.IsValid)
         //    {
-        //        var department = new Department
-        //        {
-        //            Code = model.Code,
-        //            Name = model.Name,
-        //            CreateAt = model.CreateAt,
-        //        };
+        //        if (id != department.Id) return BadRequest(); // 400
+
         //        var count = _departmentRepository.Update(department);
         //        if (count > 0)
         //        {
@@ -126,8 +108,32 @@ namespace Company.Route.PL.Controllers
         //        }
 
         //    }
-        //    return View(model);
+        //    return View(department);
         //}
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromRoute] int id, CreateDepartmentDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var department = new Department
+                {
+                    Id = id,
+                    Code = model.Code,
+                    Name = model.Name,
+                    CreateAt = model.CreateAt,
+                };
+                var count = _departmentRepository.Update(department);
+                if (count > 0)
+                {
+                    return RedirectToAction("Index");
+                }
+
+            }
+            return View(model);
+        }
 
 
         #endregion
