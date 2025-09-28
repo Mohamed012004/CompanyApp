@@ -81,18 +81,55 @@ namespace Company.Route.PL.Controllers
         // GET: EmployeeController/Edit/5
         public IActionResult Edit(int id)
         {
+            if (id == null) return BadRequest("InValid Id");
+            var employee = _employeeRepository.Get(id);
+
+            if (employee == null) return NotFound(new
+            {
+                StateCode = 404,
+                Message = $"Department With {id}, Not Found"
+            });
+            var employeeDto = new CreateEmployeeDto()
+            {
+                Name = employee.Name,
+                Age = employee.Age,
+                Email = employee.Email,
+                Address = employee.Address,
+                Phone = employee.Phone,
+                Salary = employee.Salary,
+                IsActive = employee.IsActive,
+                IsDeleted = employee.IsDeleted,
+                HiringDate = employee.HiringDate,
+                CreateAt = employee.CreateAt
+            };
+
+            return View(employeeDto);
+
             //Refactoring
-            return Details(id, "Edit");
+            //return Details(id, "Edit");
         }
 
         // POST: EmployeeController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Employee employee)
+        public IActionResult Edit([FromRoute] int id, CreateEmployeeDto model)
         {
             if (ModelState.IsValid)
             {
-                if (id != employee.Id) return BadRequest(); // If You Fetch Id From For Or Any Thing Except  Segment=Route return BadRequest:400 
+                var employee = new Employee()
+                {
+                    Id = id,
+                    Name = model.Name,
+                    Age = model.Age,
+                    Email = model.Email,
+                    Address = model.Address,
+                    Phone = model.Phone,
+                    Salary = model.Salary,
+                    IsActive = model.IsActive,
+                    IsDeleted = model.IsDeleted,
+                    HiringDate = model.HiringDate,
+                    CreateAt = model.CreateAt
+                };
 
                 var count = _employeeRepository.Update(employee);
                 if (count > 0)
@@ -101,7 +138,7 @@ namespace Company.Route.PL.Controllers
                 }
             }
 
-            return View(employee);
+            return View(model);
         }
 
         // GET: EmployeeController/Delete/5

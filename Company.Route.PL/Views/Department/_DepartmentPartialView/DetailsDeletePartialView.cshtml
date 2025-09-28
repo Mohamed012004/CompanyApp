@@ -1,0 +1,19 @@
+﻿@model Department
+
+<div>
+    <div class="my-3">
+        <label asp-for="Code" class="col-form-label"> </label>
+        <input asp-for="@Model.Code" class="form-control" readonly></input>
+    </div>
+
+    <div class="my-3">
+        <label asp-for="Name" class="col-form-label"> </label>
+        <input asp-for="@Model.Name" class="form-control" readonly></input>
+    </div>
+
+    <div class="my-3">
+        <label asp-for="CreateAt" class="col-form-label"> </label>
+        <input asp-for="@Model.CreateAt" class="form-control" readonly></input>
+    </div>
+
+</div>
