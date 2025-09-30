@@ -8,5 +8,10 @@ namespace Company.Route.DAL.Models
         public string Name { get; set; }
         public DateTime CreateAt { get; set; }
 
+
+
+        // Navigation Property
+        public List<Employee> Employees { get; set; }
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Company.Route.BLL.Interfaces;
-using Company.Route.DAL;
+using Company.Route.DAL.Models;
 using Company.Route.PL.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,16 +8,27 @@ namespace Company.Route.PL.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
             _employeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
 
         // GET: EmployeeController
         public IActionResult Index()
         {
             var employee = _employeeRepository.GetAll();
+            // Dectionary: 3 Properties
+            // 1. ViewData : Transfer Extra Information Fro Controller(Action) To View
+            ViewData["Message"] = "Hello World From ViewData";
+
+            // 2. ViewBag : Transfer Extra Information Fro Controller(Action) To View
+            ViewBag.Message = "Hello World from ViewBag";
+
+            // 3. TempData
+
             return View(employee);
 
         }
@@ -26,6 +37,9 @@ namespace Company.Route.PL.Controllers
         // GET: EmployeeController/Create
         public IActionResult Create()
         {
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments;
+
             return View();
         }
 
@@ -48,12 +62,15 @@ namespace Company.Route.PL.Controllers
                     IsActive = model.IsActive,
                     IsDeleted = model.IsDeleted,
                     HiringDate = model.HiringDate,
-                    CreateAt = model.CreateAt
+                    CreateAt = model.CreateAt,
+                    DepartmentID = model.DepartmentId
+
                 };
 
                 var count = _employeeRepository.ADD(employee);
                 if (count > 0)
                 {
+                    TempData["Message"] = "Employee Is Created Successfully";
                     return RedirectToAction("Index");
                 }
             }
@@ -81,6 +98,7 @@ namespace Company.Route.PL.Controllers
         // GET: EmployeeController/Edit/5
         public IActionResult Edit(int id)
         {
+
             if (id == null) return BadRequest("InValid Id");
             var employee = _employeeRepository.Get(id);
 
@@ -89,6 +107,10 @@ namespace Company.Route.PL.Controllers
                 StateCode = 404,
                 Message = $"Department With {id}, Not Found"
             });
+
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments;
+
             var employeeDto = new CreateEmployeeDto()
             {
                 Name = employee.Name,
@@ -100,7 +122,10 @@ namespace Company.Route.PL.Controllers
                 IsActive = employee.IsActive,
                 IsDeleted = employee.IsDeleted,
                 HiringDate = employee.HiringDate,
-                CreateAt = employee.CreateAt
+                CreateAt = employee.CreateAt,
+                DepartmentId = employee.DepartmentID
+
+
             };
 
             return View(employeeDto);
@@ -128,7 +153,8 @@ namespace Company.Route.PL.Controllers
                     IsActive = model.IsActive,
                     IsDeleted = model.IsDeleted,
                     HiringDate = model.HiringDate,
-                    CreateAt = model.CreateAt
+                    CreateAt = model.CreateAt,
+                    DepartmentID = model.DepartmentId
                 };
 
                 var count = _employeeRepository.Update(employee);

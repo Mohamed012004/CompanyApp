@@ -1,6 +1,6 @@
-﻿using Company.Route.DAL.Models;
+﻿using System.ComponentModel;
 
-namespace Company.Route.DAL
+namespace Company.Route.DAL.Models
 {
     public class Employee : BaseEntity
     {
@@ -15,6 +15,13 @@ namespace Company.Route.DAL
 
         public DateTime HiringDate { get; set; }
         public DateTime CreateAt { get; set; }
+
+        // F.K
+        [DisplayName("Department")]
+        public int? DepartmentID { get; set; }
+
+        // Navigation Property
+        public Department? Department { get; set; }
 
 
     }
