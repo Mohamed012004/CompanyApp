@@ -17,9 +17,17 @@ namespace Company.Route.PL.Controllers
         }
 
         // GET: EmployeeController
-        public IActionResult Index()
+        public IActionResult Index(string? SearchInput)
         {
-            var employee = _employeeRepository.GetAll();
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrEmpty(SearchInput))
+            {
+                employees = _employeeRepository.GetAll();
+            }
+            else
+            {
+                employees = _employeeRepository.GetByName(SearchInput);
+            }
             // Dectionary: 3 Properties
             // 1. ViewData : Transfer Extra Information Fro Controller(Action) To View
             ViewData["Message"] = "Hello World From ViewData";
@@ -29,7 +37,7 @@ namespace Company.Route.PL.Controllers
 
             // 3. TempData
 
-            return View(employee);
+            return View(employees);
 
         }
 
