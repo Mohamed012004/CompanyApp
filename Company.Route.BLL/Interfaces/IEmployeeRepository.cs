@@ -5,7 +5,7 @@ namespace Company.Route.BLL.Interfaces
     public interface IEmployeeRepository : IGenericRepository<Employee>
     {
 
-        //public Employee? GetByName(string Name);
+        public List<Employee> GetByName(string Name);
 
         #region Inherited From IGenericRepository
         //IEnumerable<Employee> GetAll();

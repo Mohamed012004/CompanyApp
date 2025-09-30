@@ -1,15 +1,22 @@
 ﻿using Company.Route.BLL.Interfaces;
 using Company.Route.DAL.Data.Contexts;
 using Company.Route.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Company.Route.BLL.Repositories
 {
     public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
     {
+        private CompanyDbContext _context { get; set; }
         // ASK From CLR To Create Or Injuct Object From CompanyDbContext
         public EmployeeRepository(CompanyDbContext context) : base(context)
         {
+            _context = context;
+        }
 
+        public List<Employee> GetByName(string Name)
+        {
+            return _context.Employees.Include(E => E.Department).Where(E => E.Name.ToLower().Contains(Name.ToLower())).ToList();
         }
 
 
