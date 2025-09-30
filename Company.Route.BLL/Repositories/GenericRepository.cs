@@ -1,10 +1,11 @@
 ﻿using Company.Route.BLL.Interfaces;
 using Company.Route.DAL.Data.Contexts;
 using Company.Route.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Company.Route.BLL.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         private readonly CompanyDbContext _context;
 
@@ -15,32 +16,42 @@ namespace Company.Route.BLL.Repositories
         }
 
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<TEntity> GetAll()
         {
-            return _context.Set<T>().ToList();
+            if (typeof(TEntity) == typeof(Employee))
+            {
+                return (IEnumerable<TEntity>)_context.Employees.Include(E => E.Department).ToList();
+            }
+
+            return _context.Set<TEntity>().ToList();
         }
-        public T? Get(int id)
+        public TEntity? Get(int id)
         {
-            return _context.Set<T>().Find(id);
+            if (typeof(TEntity) == typeof(Employee))
+            {
+                return _context.Employees.Include(E => E.Department).FirstOrDefault(E => E.Id == id) as TEntity;
+            }
+
+            return _context.Set<TEntity>().Find(id);
         }
 
 
-        public int ADD(T model)
+        public int ADD(TEntity model)
         {
-            _context.Set<T>().Add(model);
+            _context.Set<TEntity>().Add(model);
             return _context.SaveChanges();
 
         }
 
 
-        public int Update(T model)
+        public int Update(TEntity model)
         {
-            _context.Set<T>().Update(model);
+            _context.Set<TEntity>().Update(model);
             return _context.SaveChanges();
         }
-        public int Delete(T model)
+        public int Delete(TEntity model)
         {
-            _context.Set<T>().Remove(model);
+            _context.Set<TEntity>().Remove(model);
             return _context.SaveChanges();
         }
     }
