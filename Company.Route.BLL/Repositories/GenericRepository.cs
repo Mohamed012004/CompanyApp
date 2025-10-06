@@ -36,23 +36,23 @@ namespace Company.Route.BLL.Repositories
         }
 
 
-        public int ADD(TEntity model)
+        public void ADD(TEntity model)
         {
             _context.Set<TEntity>().Add(model);
-            return _context.SaveChanges();
+            //return _context.SaveChanges();
 
         }
 
 
-        public int Update(TEntity model)
+        public void Update(TEntity model)
         {
             _context.Set<TEntity>().Update(model);
-            return _context.SaveChanges();
+            //return _context.SaveChanges();
         }
-        public int Delete(TEntity model)
+        public void Delete(TEntity model)
         {
             _context.Set<TEntity>().Remove(model);
-            return _context.SaveChanges();
+            //return _context.SaveChanges();
         }
     }
 }

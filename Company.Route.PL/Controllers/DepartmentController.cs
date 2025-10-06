@@ -8,17 +8,21 @@ namespace Company.Route.PL.Controllers
     // MVC Controller 
     public class DepartmentController : Controller
     {
-        public readonly IDepartmentRepository _departmentRepository; // Null
+        private readonly IUnitOfWork _unitOfWork;
+
+        //public readonly IDepartmentRepository _departmentRepository; // Null
         // ASK  From CLR To Create Objet From DepartmentRepository 
-        public DepartmentController(IDepartmentRepository departmentrepositoy) // Recommended To make ctor Against Reference Not Concrate Class 
+        public DepartmentController(
+           /* IDepartmentRepository departmentrepositoy*/ IUnitOfWork unitOfWork) // Recommended To make ctor Against Reference Not Concrate Class 
         {
-            _departmentRepository = departmentrepositoy;
+            //_departmentRepository = departmentrepositoy;
+            _unitOfWork = unitOfWork;
         }
 
         // /Department/Index
         public IActionResult Index()   // Note: Its Perfect To implement Function Against Interface(IActionResult) Not Concrate Class(ActionResult)
         {
-            var departments = _departmentRepository.GetAll();
+            var departments = _unitOfWork.DepartmentRepository.GetAll();
             return View(departments);
         }
         [HttpGet]
@@ -39,7 +43,9 @@ namespace Company.Route.PL.Controllers
                     CreateAt = model.CreateAt
                 };
 
-                var count = _departmentRepository.ADD(department);
+                _unitOfWork.DepartmentRepository.ADD(department);
+                var count = _unitOfWork.Compaated();
+
 
                 if (count > 0)
                 {
@@ -54,7 +60,7 @@ namespace Company.Route.PL.Controllers
         public IActionResult Details(int id, string viewName = "Details")
         {
             if (id == null) return BadRequest("InValid Id");
-            var department = _departmentRepository.Get(id);
+            var department = _unitOfWork.DepartmentRepository.Get(id);
             if (department is null)
             {
                 return NotFound(new
@@ -73,7 +79,7 @@ namespace Company.Route.PL.Controllers
         public IActionResult Edit(int id)
         {
             if (id == null) return BadRequest("Invalid Id");
-            var department = _departmentRepository.Get(id);
+            var department = _unitOfWork.DepartmentRepository.Get(id);
             if (department is null) return NotFound(new
             {
                 StatusCode = 404,
@@ -125,7 +131,9 @@ namespace Company.Route.PL.Controllers
                     Name = model.Name,
                     CreateAt = model.CreateAt,
                 };
-                var count = _departmentRepository.Update(department);
+                _unitOfWork.DepartmentRepository.Update(department);
+                var count = _unitOfWork.Compaated();
+
                 if (count > 0)
                 {
                     return RedirectToAction("Index");
@@ -164,7 +172,9 @@ namespace Company.Route.PL.Controllers
             {
                 if (id != department.Id) return BadRequest(); // 400
 
-                var count = _departmentRepository.Delete(department);
+                _unitOfWork.DepartmentRepository.Delete(department);
+                var count = _unitOfWork.Compaated();
+
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
