@@ -19,7 +19,6 @@ namespace Company.Route.BLL.Repositories
             return _context.Employees.Include(E => E.Department).Where(E => E.Name.ToLower().Contains(Name.ToLower())).ToList();
         }
 
-
         #region Implemented By Class GenericRepository
 
         // Ask From CLR To Create Object From Company DBContext

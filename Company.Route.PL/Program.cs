@@ -1,6 +1,8 @@
 using Company.Route.BLL.Interfaces;
 using Company.Route.BLL.Repositories;
 using Company.Route.DAL.Data.Contexts;
+using Company.Route.PL.Mapping;
+using Company.Route.PL.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.Route.PL
@@ -21,6 +23,19 @@ namespace Company.Route.PL
                 //options.UseSqlServer(builder.Configuration["DefaultConnection"]); // Pass Key ==> return Value
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });  // Allow DI For CompanyDbContext
+
+            // Life Time Services
+            //builder.Services.AddScoped<();        // Create Life Time Per Request  -  Object UnReachable   
+            //builder.Services.AddTransient();      // Create Life Time Per Operation 
+            //builder.Services.TryAddSingleton();   // Create Life Time Per App 
+
+            builder.Services.AddScoped<IScopedServices, ScopedServices>(); // Create Lif Time Per Request 
+            builder.Services.AddTransient<ITransiantService, TransiantService>();
+            builder.Services.AddSingleton<ISingletonServices, SingeltonServices>();
+
+            //builder.Services.AddAutoMapper(typeof(EmployeeProfile));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new EmployeeProfile()));
+
 
             var app = builder.Build();
 

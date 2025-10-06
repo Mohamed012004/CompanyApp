@@ -6,7 +6,7 @@ namespace Company.Route.PL.DTOs
     public class CreateEmployeeDto
     {
         [Required(ErrorMessage = "Name is Required !!")]
-        public string Name { get; set; }
+        public string EmpName { get; set; }
         [Range(22, 60, ErrorMessage = "The Age Must be Betwean 22 to 60")]
         public double Age { get; set; }
         [DataType(DataType.EmailAddress, ErrorMessage = "Email is not Valid !!")]
