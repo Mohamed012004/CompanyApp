@@ -1,5 +1,5 @@
+using Company.Route.BLL;
 using Company.Route.BLL.Interfaces;
-using Company.Route.BLL.Repositories;
 using Company.Route.DAL.Data.Contexts;
 using Company.Route.PL.Mapping;
 using Company.Route.PL.Services;
@@ -16,8 +16,11 @@ namespace Company.Route.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();  // Register Build-in MVC Services
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();  // Allow DI For DepartmentRepository
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();  // Allow DI For DepartmentRepository
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();  // Allow DI For DepartmentRepository
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();  // Allow DI For DepartmentRepository
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // Allow DI For UnitOfWork
+
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
                 //options.UseSqlServer(builder.Configuration["DefaultConnection"]); // Pass Key ==> return Value

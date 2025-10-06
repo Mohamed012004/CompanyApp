@@ -8,16 +8,20 @@ namespace Company.Route.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        //private readonly IEmployeeRepository _employeeRepository;
         //private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeRepository employeeRepository,
+        public EmployeeController(
+            //IEmployeeRepository employeeRepository,
             //IDepartmentRepository departmentRepository,
+            IUnitOfWork unitOfWork,
             IMapper mapper)
         {
-            _employeeRepository = employeeRepository;
+            //_employeeRepository = employeeRepository;
             //_departmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -27,11 +31,11 @@ namespace Company.Route.PL.Controllers
             IEnumerable<Employee> employees;
             if (string.IsNullOrEmpty(SearchInput))
             {
-                employees = _employeeRepository.GetAll();
+                employees = _unitOfWork.EmployeeRepository.GetAll();
             }
             else
             {
-                employees = _employeeRepository.GetByName(SearchInput);
+                employees = _unitOfWork.EmployeeRepository.GetByName(SearchInput);
             }
             // Dectionary: 3 Properties
             // 1. ViewData : Transfer Extra Information Fro Controller(Action) To View
@@ -81,7 +85,8 @@ namespace Company.Route.PL.Controllers
 
                 // AutoMapper Mapping
                 var employee = _mapper.Map<Employee>(model);
-                var count = _employeeRepository.ADD(employee);
+                _unitOfWork.EmployeeRepository.ADD(employee);
+                var count = _unitOfWork.Compaated();
                 if (count > 0)
                 {
                     TempData["Message"] = "Employee Is Created Successfully";
@@ -98,7 +103,7 @@ namespace Company.Route.PL.Controllers
 
         {
             if (id == null) return BadRequest("InNalid Id");
-            var employee = _employeeRepository.Get(id);
+            var employee = _unitOfWork.EmployeeRepository.Get(id);
 
             if (employee == null) return NotFound(new
             {
@@ -115,7 +120,7 @@ namespace Company.Route.PL.Controllers
         {
 
             if (id == null) return BadRequest("InValid Id");
-            var employee = _employeeRepository.Get(id);
+            var employee = _unitOfWork.EmployeeRepository.Get(id);
 
             if (employee == null) return NotFound(new
             {
@@ -175,7 +180,9 @@ namespace Company.Route.PL.Controllers
                 //};
                 var employee = _mapper.Map<Employee>(model);
                 employee.Id = id;
-                var count = _employeeRepository.Update(employee);
+                _unitOfWork.EmployeeRepository.Update(employee);
+                var count = _unitOfWork.Compaated();
+
                 if (count > 0)
                 {
                     return RedirectToAction("Index");
@@ -189,7 +196,7 @@ namespace Company.Route.PL.Controllers
         public IActionResult Delete(int id)
         {
             if (id == null) return BadRequest("Invalid Id");
-            var employee = _employeeRepository.Get(id);
+            var employee = _unitOfWork.EmployeeRepository.Get(id);
             if (employee is null) return NotFound(
                 new
                 {
@@ -210,7 +217,9 @@ namespace Company.Route.PL.Controllers
             {
                 if (id != employee.Id) return BadRequest(); // If You Fetch Id From Form Or Any Thing Except  Segment=Route return BadRequest:400 
 
-                var count = _employeeRepository.Delete(employee);
+                _unitOfWork.EmployeeRepository.Delete(employee);
+                var count = _unitOfWork.Compaated();
+
                 if (count > 0)
                 {
                     return RedirectToAction("Index");

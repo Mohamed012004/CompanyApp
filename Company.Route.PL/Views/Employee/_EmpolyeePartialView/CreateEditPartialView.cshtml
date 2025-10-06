@@ -1,8 +1,8 @@
 ﻿ @model CreateEmployeeDto
-@inject IDepartmentRepository _departmentRepository
+@inject IUnitOfWork _unitOfWork
 @{
     // var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department> , "Id" , "Name");
-    var Departments = new SelectList(_departmentRepository.GetAll(), "Id" , "Name");
+    var Departments = new SelectList(_unitOfWork.DepartmentRepository.GetAll(), "Id" , "Name");
 }
 <div class="my-3">
     <label asp-for="EmpName" class="col-form-label"> </label>

@@ -7,8 +7,8 @@ namespace Company.Route.BLL.Interfaces
         IEnumerable<T> GetAll();
         T? Get(int id);
 
-        int ADD(T model);
-        int Update(T model);
-        int Delete(T model);
+        void ADD(T model);
+        void Update(T model);
+        void Delete(T model);
     }
 }
