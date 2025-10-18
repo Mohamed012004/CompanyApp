@@ -1,13 +1,13 @@
-﻿using Company.Route.DAL.Models;
+using Company.Route.DAL.Models;
 
 namespace Company.Route.BLL.Interfaces
 {
     public interface IGenericRepository<T> where T : BaseEntity
     {
-        IEnumerable<T> GetAll();
-        T? Get(int id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T?> GetAsync(int id);
 
-        void ADD(T model);
+        Task AddAsync(T model);
         void Update(T model);
         void Delete(T model);
     }

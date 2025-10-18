@@ -14,9 +14,9 @@ namespace Company.Route.BLL.Repositories
             _context = context;
         }
 
-        public List<Employee> GetByName(string Name)
+        public async Task<List<Employee>> GetByNameAsync(string Name)
         {
-            return _context.Employees.Include(E => E.Department).Where(E => E.Name.ToLower().Contains(Name.ToLower())).ToList();
+            return await _context.Employees.Include(E => E.Department).Where(E => E.Name.ToLower().Contains(Name.ToLower())).ToListAsync();
         }
 
         #region Implemented By Class GenericRepository

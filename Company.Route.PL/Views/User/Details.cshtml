@@ -1,0 +1,18 @@
+﻿@model UserToReturnDto
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Employee Details</h1>
+
+<br />
+<br />
+<div>
+    <partial name="_EmpolyeePartialView/DetailsDeletePartialView" />
+
+    <div>
+         <a asp-action="Edit" asp-controller="Employee"  class="btn btn-success">Edit</a>  @*// Error *@
+        <a asp-action="Index" class="btn btn-light">Back to List</a>
+    </div>
+</div>
+

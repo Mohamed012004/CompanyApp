@@ -1,10 +1,10 @@
-﻿using Company.Route.BLL.Interfaces;
+using Company.Route.BLL.Interfaces;
 using Company.Route.BLL.Repositories;
 using Company.Route.DAL.Data.Contexts;
 
 namespace Company.Route.BLL
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IAsyncDisposable
     {
         public IDepartmentRepository DepartmentRepository { get; } // NULL
 
@@ -19,9 +19,15 @@ namespace Company.Route.BLL
             DepartmentRepository = new DepartmentRepository(context);
         }
 
-        public int Compaated()
+        public async Task<int> ComplatedAsync()
         {
-            return _Context.SaveChanges();
+            return await _Context.SaveChangesAsync();
+        }
+
+
+        public async ValueTask DisposeAsync()
+        {
+            await _Context.DisposeAsync();
         }
     }
 }

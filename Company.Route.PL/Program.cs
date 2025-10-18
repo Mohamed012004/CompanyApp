@@ -1,8 +1,12 @@
 using Company.Route.BLL;
 using Company.Route.BLL.Interfaces;
+using Company.Route.BLL.Repositories;
 using Company.Route.DAL.Data.Contexts;
+using Company.Route.DAL.Models;
+using Company.Route.PL.Helpers;
 using Company.Route.PL.Mapping;
 using Company.Route.PL.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.Route.PL
@@ -16,11 +20,9 @@ namespace Company.Route.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();  // Register Build-in MVC Services
-            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();  // Allow DI For DepartmentRepository
-            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();  // Allow DI For DepartmentRepository
-
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // Allow DI For UnitOfWork
-
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();  // Allow DI For DepartmentRepository
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();  // Allow DI For DepartmentRepository
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // Allow DI For IUnitOfWork
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
                 //options.UseSqlServer(builder.Configuration["DefaultConnection"]); // Pass Key ==> return Value
@@ -39,8 +41,20 @@ namespace Company.Route.PL
             //builder.Services.AddAutoMapper(typeof(EmployeeProfile));
             builder.Services.AddAutoMapper(M => M.AddProfile(new EmployeeProfile()));
 
+            builder.Services.AddIdentity<AppUser, IdentityRole>()
+                            .AddEntityFrameworkStores<CompanyDbContext>()
+                            .AddDefaultTokenProviders();
 
+            builder.Services.ConfigureApplicationCookie(config =>
+             config.LoginPath = "/Account/SignIn");
+
+
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
+            builder.Services.AddScoped<IMailService, MailService>();
+
+            //================================
             var app = builder.Build();
+            //================================
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -54,6 +68,9 @@ namespace Company.Route.PL
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
 
             app.MapControllerRoute(

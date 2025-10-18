@@ -8,8 +8,11 @@ namespace Company.Route.PL.Mapping
     {
         public EmployeeProfile()
         {
-            CreateMap<CreateEmployeeDto, Employee>()
-                .ForMember(M => M.Name, o => o.MapFrom(Dto => Dto.EmpName)).ReverseMap();
+            CreateMap<CreateEmployeeDto, Employee>();
+            //.ForMember(M => M.Name, o => o.MapFrom(Dto => Dto.EmpName));
+
+            CreateMap<Employee, CreateEmployeeDto>();
+            //.ForMember(M => M.EmpName, o => o.MapFrom(E => E.Name));
 
             //CreateMap<CreateEmployeeDto, Employee>().ReverseMap();
             //CreateMap<Employee, CreateEmployeeDto>();
