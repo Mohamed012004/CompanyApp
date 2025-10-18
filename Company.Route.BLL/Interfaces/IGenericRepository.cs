@@ -1,4 +1,4 @@
-﻿using Company.Route.DAL.Models;
+using Company.Route.DAL.Models;
 
 namespace Company.Route.BLL.Interfaces
 {

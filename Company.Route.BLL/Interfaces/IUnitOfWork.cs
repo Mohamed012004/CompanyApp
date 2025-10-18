@@ -1,4 +1,4 @@
-﻿namespace Company.Route.BLL.Interfaces
+namespace Company.Route.BLL.Interfaces
 {
     public interface IUnitOfWork
     {

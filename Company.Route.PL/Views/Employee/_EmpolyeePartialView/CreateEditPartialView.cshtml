@@ -1,4 +1,4 @@
-﻿@model CreateEmployeeDto
+@model CreateEmployeeDto
 @inject IUnitOfWork _unitOfWork
 @{
     var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name");
