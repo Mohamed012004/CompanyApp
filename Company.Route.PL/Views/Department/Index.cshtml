@@ -1,7 +1,7 @@
-﻿ @model IEnumerable<Department>
+﻿@model IEnumerable<Department>
 @{
     ViewData["Title"] = "Index";
- }
+}
 
 <h1>All Departments</h1>
 
@@ -9,11 +9,11 @@
 <br />
 <div>
     <a asp-action="Create" asp-controller="Department" class="btn btn-primary">Create Department</a>
-<div/>
-<br />
+    <div />
+    <br />
 
-<div>
-    @if(Model.Count() > 0)
+    <div>
+        @if (Model.Count() > 0)
         {
             <table class="table table-hover table-striped">
                 <thead>
@@ -29,19 +29,20 @@
                 <body>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>@item.Code</td>
-                            <td>@item.Name</td>
-                            <td>@item.CreateAt</td>
+                    <tr>
+                        <td>@item.Code</td>
+                        <td>@item.Name</td>
+                        <td>@item.CreateAt</td>
 
-                        <partial name="_ButtonPartialView" model="@item.Id" />
+                        <partial name="_ButtonPartialView" model="@item.Id.ToString()" />
 
                     </tr>
-                    
+
                 }
                 </body>
             </table>
-        }else
+        }
+        else
         {
             <div mt-4 class="alert alert-info">
                 <h4>There is No Department :(</h4>

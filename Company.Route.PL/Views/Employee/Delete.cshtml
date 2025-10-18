@@ -1,16 +1,17 @@
-﻿@model Employee
+﻿@model CreateEmployeeDto
 @{
     ViewData["Title"] = "Delete";
 }
 
 <h1>Delete Employee</h1>
 
-<br/>
-<br/>
+<br />
+<br />
 
 <form asp-action="Delete">
 
     <partial name="_EmpolyeePartialView/DetailsDeletePartialView" />
+    <input asp-for="ImageName" hidden />
 
 
     <div>

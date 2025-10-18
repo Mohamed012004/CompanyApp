@@ -13,6 +13,9 @@ namespace Company.Route.DAL.Models
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
 
+        public string? ImageName { get; set; }
+
+
         public DateTime HiringDate { get; set; }
         public DateTime CreateAt { get; set; }
 
@@ -22,6 +25,9 @@ namespace Company.Route.DAL.Models
 
         // Navigation Property
         public Department? Department { get; set; }
+
+
+
 
 
     }

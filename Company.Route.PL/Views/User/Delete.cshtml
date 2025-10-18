@@ -1,0 +1,21 @@
+﻿@model UserToReturnDto
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete Employee</h1>
+
+<br/>
+<br/>
+
+<form asp-action="Delete">
+
+    <partial name="_EmpolyeePartialView/DetailsDeletePartialView" />
+ 
+
+    <div>
+        <input type="submit" value="Confirm" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-light">Back to List</a>
+    </div>
+</form>
+

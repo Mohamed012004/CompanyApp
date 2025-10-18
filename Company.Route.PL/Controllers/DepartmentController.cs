@@ -1,24 +1,30 @@
 ﻿using Company.Route.BLL.Interfaces;
 using Company.Route.DAL.Models;
 using Company.Route.PL.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Company.Route.PL.Controllers
 {
     // MVC Controller 
+    [Authorize]
     public class DepartmentController : Controller
     {
-        public readonly IDepartmentRepository _departmentRepository; // Null
+        private readonly IUnitOfWork _unitOfWork;
+
+        //public readonly IDepartmentRepository _departmentRepository; // Null
         // ASK  From CLR To Create Objet From DepartmentRepository 
-        public DepartmentController(IDepartmentRepository departmentrepositoy) // Recommended To make ctor Against Reference Not Concrate Class 
+        public DepartmentController(
+           /* IDepartmentRepository departmentrepositoy*/ IUnitOfWork unitOfWork) // Recommended To make ctor Against Reference Not Concrate Class 
         {
-            _departmentRepository = departmentrepositoy;
+            //_departmentRepository = departmentrepositoy;
+            _unitOfWork = unitOfWork;
         }
 
         // /Department/Index
-        public IActionResult Index()   // Note: Its Perfect To implement Function Against Interface(IActionResult) Not Concrate Class(ActionResult)
+        public async Task<IActionResult> Index()   // Note: Its Perfect To implement Function Against Interface(IActionResult) Not Concrate Class(ActionResult)
         {
-            var departments = _departmentRepository.GetAll();
+            var departments = await _unitOfWork.DepartmentRepository.GetAllAsync();
             return View(departments);
         }
         [HttpGet]
@@ -28,7 +34,7 @@ namespace Company.Route.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateDepartmentDto model) // Form
+        public async Task<IActionResult> Create(CreateDepartmentDto model) // Form
         {
             if (ModelState.IsValid)
             {
@@ -39,7 +45,9 @@ namespace Company.Route.PL.Controllers
                     CreateAt = model.CreateAt
                 };
 
-                var count = _departmentRepository.ADD(department);
+                await _unitOfWork.DepartmentRepository.AddAsync(department);
+                var count = await _unitOfWork.ComplatedAsync();
+
 
                 if (count > 0)
                 {
@@ -51,10 +59,10 @@ namespace Company.Route.PL.Controllers
         }
 
 
-        public IActionResult Details(int id, string viewName = "Details")
+        public async Task<IActionResult> Details(int id, string viewName = "Details")
         {
             if (id == null) return BadRequest("InValid Id");
-            var department = _departmentRepository.Get(id);
+            var department = await _unitOfWork.DepartmentRepository.GetAsync(id);
             if (department is null)
             {
                 return NotFound(new
@@ -70,10 +78,10 @@ namespace Company.Route.PL.Controllers
         #region Update
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null) return BadRequest("Invalid Id");
-            var department = _departmentRepository.Get(id);
+            var department = await _unitOfWork.DepartmentRepository.GetAsync(id);
             if (department is null) return NotFound(new
             {
                 StatusCode = 404,
@@ -114,7 +122,7 @@ namespace Company.Route.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, CreateDepartmentDto model)
+        public async Task<IActionResult> Edit([FromRoute] int id, CreateDepartmentDto model)
         {
             if (ModelState.IsValid)
             {
@@ -125,7 +133,9 @@ namespace Company.Route.PL.Controllers
                     Name = model.Name,
                     CreateAt = model.CreateAt,
                 };
-                var count = _departmentRepository.Update(department);
+                _unitOfWork.DepartmentRepository.Update(department);
+                var count = await _unitOfWork.ComplatedAsync();
+
                 if (count > 0)
                 {
                     return RedirectToAction("Index");
@@ -139,7 +149,7 @@ namespace Company.Route.PL.Controllers
         #endregion
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public Task<IActionResult> Delete(int id)
         {
             //if (id == null) return BadRequest("Invsalid Id");
 
@@ -158,13 +168,15 @@ namespace Company.Route.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]  // Prevent Action To be Accessed By Exit Tools / Software like[Postman - ...]
-        public ActionResult Delete([FromRoute] int id, Department department)
+        public async Task<ActionResult> Delete([FromRoute] int id, Department department)
         {
             if (ModelState.IsValid)
             {
                 if (id != department.Id) return BadRequest(); // 400
 
-                var count = _departmentRepository.Delete(department);
+                _unitOfWork.DepartmentRepository.Delete(department);
+                var count = await _unitOfWork.ComplatedAsync();
+
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));

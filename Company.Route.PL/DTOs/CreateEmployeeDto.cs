@@ -6,7 +6,7 @@ namespace Company.Route.PL.DTOs
     public class CreateEmployeeDto
     {
         [Required(ErrorMessage = "Name is Required !!")]
-        public string EmpName { get; set; }
+        public string Name { get; set; }
         [Range(22, 60, ErrorMessage = "The Age Must be Betwean 22 to 60")]
         public double Age { get; set; }
         [DataType(DataType.EmailAddress, ErrorMessage = "Email is not Valid !!")]
@@ -26,9 +26,15 @@ namespace Company.Route.PL.DTOs
         [DisplayName("DataType Of Create")]
         public DateTime CreateAt { get; set; }
 
+        public string? ImageName { get; set; }
+        public IFormFile? Image { get; set; }
+
+
 
         [DisplayName("Department")]
         public int? DepartmentId { get; set; }
+
+        public string? DepartmentName { get; set; }
 
 
     }

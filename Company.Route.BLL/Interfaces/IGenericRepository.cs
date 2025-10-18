@@ -4,11 +4,11 @@ namespace Company.Route.BLL.Interfaces
 {
     public interface IGenericRepository<T> where T : BaseEntity
     {
-        IEnumerable<T> GetAll();
-        T? Get(int id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T?> GetAsync(int id);
 
-        int ADD(T model);
-        int Update(T model);
-        int Delete(T model);
+        Task AddAsync(T model);
+        void Update(T model);
+        void Delete(T model);
     }
 }

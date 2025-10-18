@@ -1,4 +1,4 @@
-﻿ @model CreateEmployeeDto
+﻿@model CreateEmployeeDto
 @{
     ViewData["Title"] = "Create";
 }
@@ -8,7 +8,7 @@
 <br />
 <br />
 
-<form asp-action="Create">
+<form asp-action="Create" enctype="multipart/form-data">
     <partial name="_EmpolyeePartialView/CreateEditPartialView" />
 
 
@@ -21,8 +21,8 @@
 
 @section ValidationSection
 {
-     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
 
 
